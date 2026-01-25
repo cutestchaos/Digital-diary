@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Journal</title>
+  <style> 
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
+      color: #1e3a8a;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #1e40af;
+    }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 10px 0;
+      scroll-snap-type: x mandatory;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .polaroid {
+      flex: 0 0 auto;
+      width: 180px;
+      background: white;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      scroll-snap-align: center;
+      transform: rotate(-2deg);
+      transition: transform 0.3s ease;
+    }
+
+    .polaroid:hover {
+      transform: rotate(0deg) scale(1.03);
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .polaroid p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #1e3a8a;
+    }
+    .carousel {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 10px;
+      scroll-snap-type: x mandatory;
+    }
+    .polaroid {
+      background-color: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px;
+      width: 180px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      scroll-snap-align: start;
+      flex: 0 0 auto;
+      text-align: center;
+      transform: rotate(-2deg);
+      transition: transform 0.3s ease;
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .polaroid:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    .section {
+      background-color: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      max-width: 700px;
+    }
+
+    .playlist button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: none;
+      background-color: #bfdbfe;
+      border-radius: 12px;
+      font-size: 1rem;
+      color: #1e3a8a;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .playlist button:hover {
+      background-color: #93c5fd;
+    }
+    #lightbox {
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 9999;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    #close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .Puzzle {
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.puzzle-image img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  display: none; /* hide to not give away full image */
+}
+
+#puzzle-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3x3 puzzle */
+  gap: 4px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.puzzle-piece {
+  width: 100px;
+  height: 100px;
+  background-size: 300px 300px;
+  background-repeat: no-repeat;
+  cursor: grab;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+ .bake-game-btn {
+    padding: 14px 28px;
+    background-color : #1e3a8a;
+    border: none;
+    color: #bfdbfe;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    animation: popin 0.7s ease;
+  }
+
+  .bake-game-btn:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .bake-game-btn:active {
+    animation: wiggle 0.3s ease-in-out;
+  }
+
+  @keyframes popin {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(3deg); }
+    50% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+    100% { transform: rotate(0deg); }
+  }
+  .song-btn {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  background-color: #B399FF;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.song-btn:hover {
+  background-color: #8b6fcf;
+  transform: scale(1.05);
+}
+
+  .quiz-btn {
+   padding: 14px 28px;
+    background-color : #1e3a8a;
+    border: none;
+    color: #bfdbfe;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    animation: popin 0.7s ease;
+}
+
+.quiz-btn:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="section"> <!--Intoduction-->
+    <h1>Sambhav 💙 Riya </h1>
+    <h2>🐨🐥</h2>
+    <p>Our Digital Love Journal, celebrating 2 years of cuteness!</p>
+  </div>
+
+  <div class="section"> <!--Our meet-->
+    <h2>🌟 Timeline</h2>
+    <ul>
+      <li><strong>2nd August 2023:</strong>The day we met 💫</li>
+      <li><strong>20th August 2023:</strong>The day I sent you the first reel </li>
+      <li><strong>7th September 2023:</strong> The day you wrote 3 huge paragraphs for me❤️</li>
+      <li><strong>21st October 2023:</strong> The day we went to play Garba together , you came down near my home, so we could go together-hehe 😽</li>
+      <li><strong>9th November 2023:</strong> The day I told you - I don't like you, Please do not take so much efforts for me😋💔</li>
+      <li><strong>28th November 2023:</strong> The day we danced together on the song : "perfect",romanticallly 🕺🏻💃🏻</li>
+      <li><strong>1st March 2024:</strong> The day we both finally saw each other wearing Traditional outfits✨💗</li>
+      <li><strong>26th April 2024:</strong>The day after my Birthday, when you came to celebrate it with me. And gave me a HUGEE Frame 💓🩷</li>
+      <li><strong> 10th July 2024:</strong>The day we went to eat Pizza at Inorbit @ Vashi </li>
+      <li><strong>2nd August 2024:</strong>The day we completed 1 Year Together!!💫 WE went to Snow-World at Pheonix and ate subway & momos and doughnuts in desserts.❄️😍🥺🩷</li>
+      
+      
+    </ul>
+  </div>
+<!--Puzzle-->
+  <div class="Puzzle">
+    <h2>🧩 Puzzle Surprise</h2>
+    <p class="hint">Solve this to unlock our memory 💙</p>
+    
+    <!-- Fallback/visible image -->
+    <div class="puzzle-image">
+      <img src="doodles/IMG-20250717-WA0007.jpg" alt="Our cute memory" id="puzzleImage" />
+    </div>
+
+    <div id="puzzle-board"></div>
+</div>
+
+<script src="puzzle.js"></script>
+
+  <!--countdown-->
+  <div id="countdown" style="text-align: center; font-size: 1.2rem; margin: 20px auto; color: #2563eb;"></div>
+
+  <div class="section playlist"> <!--Playlist -->
+    <h2>🎶 Our Playlist</h2>
+    <button onclick="window.open('https://open.spotify.com/track/4TrbZZCZMsJA6hGklBe7kM?si=3d38b936c40e4204', '_blank')">Chand Ne Kaho</button>
+    <button onclick="window.open('https://open.spotify.com/track/3hB9lDLyAClYVZivMMl20N?si=b8ff8ce62df74434', '_blank')">CO2</button>
+    <button onclick="window.open('https://open.spotify.com/track/7wrYBASu0OoxoDErd4Edxd?si=17ffa5d6347c4a57', '_blank')">Zara Zara</button>
+    <button onclick="window.open('https://open.spotify.com/track/6dOtVTDdiauQNBQEDOtlAB?si=8d945341889c47ba', '_blank')">Birds of feather</button>
+    <button onclick="window.open('https://open.spotify.com/track/6t7WriKgVszATnrdBKSUAf?si=9ccc27c21dd44ee5', '_blank')">Just one day</button>
+    <button onclick="window.open('https://open.spotify.com/track/1BaLGwnoaiPdViWnh7ogbs?si=a8f590b8bfac4dc5', '_blank')">Vhalam Aavo Ne </button>
+    <button onclick="window.open('https://open.spotify.com/track/2GmDKB7skBipPXBBkM0RBt?si=f6cca05aeb9a4db9', '_blank')">Kehvu Ghanu</button>
+    <button onclick="window.open('https://open.spotify.com/track/0tgVpDi06FyKpA1z0VMD4v?si=897f78e716eb447c', '_blank')">Perfect </button>
+    <button onclick="window.location.href='StillWithYou.html'" class="song-btn">
+  🎧 Still With You 💜
+</button>
+<button onclick="window.location.href='MyYou.html'" class="song-btn">
+  My You 💗✨
+</button>
+  </div>
+
+  <div class="section"> <!--Polaroids -->
+  <h2>📸 Our Moments in Frames</h2>
+  <div class="carousel">
+    <div class="polaroid">
+      <img src="doodles/IMG-20250717-WA0006.jpg" alt="Memory 1">
+      <p>Us on Tie & Saree Day 💙</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/IMG-20250717-WA0007.jpg" alt="Memory 2">
+      <p>Happy Birthday Cutie</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/IMG-20250717-WA0008.jpg" alt="Memory 3">
+      <p>Fest Day it is!!😭</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/IMG-20250717-WA0009.jpg" alt="Memory 3">
+      <p>Throwback to our first Traditional Day 😭💕</p>
+    </div>
+
+    <div class="polaroid">
+      <img src="doodles/machine.jpg" alt="Memory 3">
+      <p>Our 1st anniversary's gift :- The 2 stuffed toys you won for us😭</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/ganesh utsav.jpg" alt="Memory 3">
+      <p>Ganesh Utsav</p>
+    </div>
+
+    <div class="polaroid">
+      <img src="doodles/kala-ghoda.jpg" alt="Memory 3">
+      <p>Our first date at Pheonix</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/beach.jpg" alt="Memory 3">
+      <p>Beach 🌊</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/canteen maggi.jpg" alt="Memory 3">
+      <p>Best Moment PERIOD.</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/biting.jpg" alt="Memory 3">
+      <p>Always doin' khikhikhi</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/pookie.jpg" alt="Memory 3">
+      <p>Pooks 🎀</p>
+    </div>
+    <div class="polaroid">
+      <img src="doodles/movie.jpg" alt="Memory 3">
+      <p>Our 1st Movie together 🎥🍿🕺🏻💃🏻</p>
+    </div>
+   
+    
+  </div>
+</div>
+
+<!--Cupcake QUIZ -->
+<div style="text-align: center; margin: 2rem 0;">
+  <a href="CupcakeQuiz.html" style="text-decoration: none;">
+    <button class="quiz-btn">
+         What Cupcake Are You in Love? 💘
+    </button>
+  </a>
+</div>
+
+
+<!--GAME-->
+<div style="text-align: center; margin: 2rem 0;">
+  <a href="BakeGame.html" style="text-decoration: none;">
+    <button class="bake-game-btn">
+      🍰 Play Bake Love Game
+    </button>
+  </a>
+</div>
+
+  <div class="section"> <!--Love note -->
+    <h2>📝 A Love Note 💌</h2>
+    <p>
+      Dear Pooks ,<br />
+          To the one who makes my life feel like the softest chaos,<br />
+
+        Sometimes I just stop and think — how did I end up with you?
+        Like genuinely... what the actual hell?? You bought me a frock just because? 😭<br />
+        Who does that?!<br />
+        You — the most unreal, honest, kindest to the mankind —  most annoyingly sweet, wonderfully weird boy I know  (khikhikhi).<br />
+    </p>
+
+    <p> 
+       I don’t think you realise how deeply you affect me. One moment you’re teasing me like a smol lil kiddo!! demanding attention (hehe) , 
+        and the next, you’re slipping a tiara on my head and treating me like I’m your whole world. 
+        And trust me, I feel it. Every time. Even when I act all normal on the outside, inside I’m just a mess of he really did this for me??? <br />
+
+        From our first kiss (omg YAY) to the frame you gifted me (how even 😭), you’ve turned my life into a scrapbook of little moments that scream "I love you" without always saying it. 
+        And saree & tie day? Damn. You looked like a full-on movie scene, and I swear I had this quiet moment in my head like — yup, I want to marry this man.<br />
+
+        I don't always know how to show how much you mean to me. I get awkward, I hide too much, I hide my softest feelings sometimes because they feel too big. 
+        But this is me trying —<br />
+    </p>
+    <p> 
+        I’m so glad you’re mine. 
+        I’m so grateful you stayed through everything. 
+        I’m so proud but not so of how far we’ve come.
+    </p>
+
+    <p>
+        You’re not perfect. Neither am I.
+        But damn, you’re perfect for me.<br />
+        My favourite headache. My daily dose of drama.<br />
+        My person. 💗<br />
+
+      Love,<br />
+      Riya 🐧
+    </p>
+  </div>
+  <!-- Lightbox Viewer -->
+<div id="lightbox" style="display: none;">
+  <span id="close">&times;</span>
+  <img id="lightbox-img" src="" alt="Zoomed Memory" />
+</div>
+
+
+
+
+
+<!--End of HTML-->
+<!--JavaScript -->
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.getElementById('close');
+  const polaroidImages = document.querySelectorAll('.polaroid img');
+
+  polaroidImages.forEach(img => {
+    img.addEventListener('click', () => {
+      lightbox.style.display = 'flex';
+      lightboxImg.src = img.src;
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+  });
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target !== lightboxImg && e.target !== closeBtn) {
+      lightbox.style.display = 'none';
+    }
+  });
+</script>
+
+<!--Hearts falling -->
+<script>
+  const hearts = document.createElement('style');
+  hearts.innerHTML = `
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+    .heart {
+      position: fixed;
+      top: -20px;
+      font-size: 24px;
+      color: #f472b6;
+      animation: fall 8s linear infinite;
+      pointer-events: none;
+    }
+  `;
+  document.head.appendChild(hearts);
+
+  setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '💗';
+    heart.style.left = Math.random() * 100 + 'vw';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+  }, 1000);
+</script>
+
+<!--Puzzle-->
+<script>
+  const puzzleBoard = document.getElementById("puzzle-board");
+const imageSrc = "doodles/IMG-20250717-WA0007.jpg";
+const size = 3; // 3x3
+
+let positions = [];
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function createPuzzle() {
+  puzzleBoard.innerHTML = "";
+  positions = [];
+
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      positions.push({ row, col });
+    }
+  }
+
+  const shuffled = shuffle([...positions]);
+
+  shuffled.forEach((pos, index) => {
+    const piece = document.createElement("div");
+    piece.classList.add("puzzle-piece");
+    piece.style.backgroundImage = `url(${imageSrc})`;
+    piece.style.backgroundPosition = `-${pos.col * 100}px -${pos.row * 100}px`;
+    piece.setAttribute("data-index", index);
+    piece.setAttribute("draggable", "true");
+    puzzleBoard.appendChild(piece);
+  });
+
+  enableDrag();
+}
+
+function enableDrag() {
+  const pieces = document.querySelectorAll(".puzzle-piece");
+  let dragged;
+
+  pieces.forEach((piece) => {
+    piece.addEventListener("dragstart", (e) => {
+      dragged = piece;
+    });
+
+    piece.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    piece.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const target = e.target;
+
+      if (target !== dragged) {
+        const temp = document.createElement("div");
+        puzzleBoard.replaceChild(temp, dragged);
+        puzzleBoard.replaceChild(dragged, target);
+        puzzleBoard.replaceChild(target, temp);
+        checkCompletion(); // ✅ Check after every swap
+      }
+    });
+  });
+}
+
+function checkCompletion() {
+  const pieces = document.querySelectorAll(".puzzle-piece");
+  let isComplete = true;
+
+  pieces.forEach((piece, index) => {
+    if (parseInt(piece.getAttribute("data-index")) !== index) {
+      isComplete = false;
+    }
+  });
+
+  if (isComplete) {
+    const msg = document.createElement("div");
+    msg.textContent = "🎉 Puzzle Completed! You're amazing 💙";
+    msg.style.marginTop = "1rem";
+    msg.style.fontWeight = "bold";
+    msg.style.color = "#4f46e5";
+    msg.style.fontSize = "1.2rem";
+    document.querySelector(".Puzzle").appendChild(msg);
+
+    // Optional: Show the full image too
+    document.querySelector(".puzzle-image img").style.display = "block";
+  }
+}
+
+
+window.onload = createPuzzle;
+
+</script>
+
+<!--Countdown-->
+<script>
+  const targetDate = new Date("2026-08-02T00:00:00").getTime();
+  const countdown = document.getElementById("countdown");
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+    countdown.innerHTML = `⏳ ${days}d ${hrs}h ${mins}m ${secs}s until our next Anniversary 💍`;
+  }, 1000);
+</script>
+
+</body>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍫 Bake Our Love - Chocolate Cupcake Edition</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: #fff0f5;
+      text-align: center;
+      padding: 30px;
+    }
+    h2 {
+      color: #5b2c6f;
+    }
+    .ingredients {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .ingredient {
+      padding: 10px 15px;
+      border: 2px dashed #a569bd;
+      border-radius: 12px;
+      background-color: #fbeffb;
+      cursor: grab;
+      font-size: 16px;
+    }
+    .bowl {
+      width: 200px;
+      height: 200px;
+      background: url('https://cdn-icons-png.flaticon.com/512/765/765548.png') no-repeat center/contain;
+      margin: 20px auto;
+      border: 2px dashed #8e44ad;
+      border-radius: 50%;
+    }
+    .bake-btn {
+      background-color: #6c3483;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #4a235a;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧁 Bake Our Love (Chocolate Cupcake Edition)</h2>
+  <p>Drag the ingredients into the bowl & click Bake!</p>
+
+  <div class="ingredients">
+    <div class="ingredient" draggable="true">Trust</div>
+    <div class="ingredient" draggable="true">Respect</div>
+    <div class="ingredient" draggable="true">Laughter</div>
+    <div class="ingredient" draggable="true">Late-night calls</div>
+    <div class="ingredient" draggable="true">Warm hugs</div>
+    <div class="ingredient" draggable="true">Playful fights</div>
+    <div class="ingredient" draggable="true">Blushy stares</div>
+    <div class="ingredient" draggable="true">Long walks</div>
+    <div class="ingredient" draggable="true">Cuddles</div>
+    <div class="ingredient" draggable="true">Chocolate cravings 🍫</div>
+  </div>
+
+  <div class="bowl" id="bowl" ondragover="event.preventDefault()" ondrop="drop(event)"></div>
+
+  <button class="bake-btn" onclick="bakeLove()">🍰 Bake!</button>
+
+  <div class="message" id="message"></div>
+
+  <script>
+    let ingredients = [];
+
+    document.querySelectorAll('.ingredient').forEach(item => {
+      item.addEventListener('dragstart', function (e) {
+        e.dataTransfer.setData('text', e.target.innerText);
+      });
+    });
+
+    function drop(e) {
+      const data = e.dataTransfer.getData('text');
+      if (!ingredients.includes(data)) {
+        ingredients.push(data);
+      }
+    }
+
+    function bakeLove() {
+      if (ingredients.length < 4) {
+        document.getElementById('message').innerText = "Your cupcake needs more love! Add more ingredients 💖";
+        return;
+      }
+      document.getElementById('message').innerText =
+        `🍫 Chocolate Cupcake Baked with ${ingredients.join(', ')}!
+        \nSweetest thing you'll ever taste 💕 Love you forever.`;
+    }
+  </script>
+</body>
+</html>

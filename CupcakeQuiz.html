@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What Type of Cupcake Are You in Love?</title>
+  <link rel="stylesheet" href="CupcakeQuiz.css" />
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>🧁 What Type of Cupcake Are You in Love?</h1>
+    <form id="quizForm">
+      <div class="question">
+        <p>1. How do you express love?</p>
+        <label><input type="radio" name="q1" value="a" required> Warm cuddles & calm talks</label>
+        <label><input type="radio" name="q1" value="b"> Surprises & deep gazes</label>
+        <label><input type="radio" name="q1" value="c"> Laughing like crazy together</label>
+        <label><input type="radio" name="q1" value="d"> Silent stares & poetic texts</label>
+      </div>
+
+      <div class="question">
+        <p>2. Your ideal love date?</p>
+        <label><input type="radio" name="q2" value="a" required> Cozy movie night</label>
+        <label><input type="radio" name="q2" value="b"> Stargazing & music</label>
+        <label><input type="radio" name="q2" value="c"> Picnic with jokes & games</label>
+        <label><input type="radio" name="q2" value="d"> Candlelight dinner & soft kisses</label>
+      </div>
+
+      <div class="question">
+        <p>3. What makes you fall harder?</p>
+        <label><input type="radio" name="q3" value="a" required> Gentle touch</label>
+        <label><input type="radio" name="q3" value="b"> Emotional depth</label>
+        <label><input type="radio" name="q3" value="c"> Being silly together</label>
+        <label><input type="radio" name="q3" value="d"> The mystery in their eyes</label>
+      </div>
+
+      <button type="submit">Reveal My Cupcake! 💘</button>
+    </form>
+
+    <div id="result" class="result hidden">
+      <h2>You are a <span id="cupcake-type"></span>!</h2>
+      <p id="description"></p>
+      <img id="cupcake-img" src="" alt="" />
+    </div>
+  </div>
+
+  <script src="CupcakeQuiz.js"></script>
+</body>
+</html>
