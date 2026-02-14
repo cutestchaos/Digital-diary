@@ -608,9 +608,33 @@ window.onload = createPuzzle;
     countdown.innerHTML = `⏳ ${days}d ${hrs}h ${mins}m ${secs}s until our next Anniversary 💍`;
   }, 1000);
 </script>
+<!-- Hidden Visitor Tracking Form -->
+<form id="visitorForm" action="https://formspree.io/f/xpqjdwzv" method="POST" style="display:none;">
+  <input type="text" name="visitor_time" id="visitorTime">
+  <input type="text" name="visitor_device" id="visitorDevice">
+  <input type="text" name="visitor_page" id="visitorPage">
+</form>
 <script>
-  const formspreeEndpoint = 'https://formspree.io/f/xpqjdwzv';
+  window.addEventListener("load", function () {
+
+    const form = document.getElementById("visitorForm");
+
+    // Fill hidden fields
+    document.getElementById("visitorTime").value = new Date().toLocaleString();
+    document.getElementById("visitorDevice").value = navigator.userAgent;
+    document.getElementById("visitorPage").value = window.location.href;
+
+    // Send form automatically
+    fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+  });
 </script>
 
 </body>
 </html>
+
