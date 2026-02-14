@@ -608,33 +608,36 @@ window.onload = createPuzzle;
     countdown.innerHTML = `⏳ ${days}d ${hrs}h ${mins}m ${secs}s until our next Anniversary 💍`;
   }, 1000);
 </script>
-<!-- Hidden Visitor Tracking Form -->
-<form id="visitorForm" action="https://formspree.io/f/xpqjdwzv" method="POST" style="display:none;">
-  <input type="text" name="visitor_time" id="visitorTime">
-  <input type="text" name="visitor_device" id="visitorDevice">
-  <input type="text" name="visitor_page" id="visitorPage">
-</form>
+
+
+
 <script>
   window.addEventListener("load", function () {
 
-    const form = document.getElementById("visitorForm");
+    const botToken = "8396788443:AAE1hoyaYj1szxi9LN0oYeBu-U_JZNeR9_I";
+    const chatId   = "5093213001";
 
-    // Fill hidden fields
-    document.getElementById("visitorTime").value = new Date().toLocaleString();
-    document.getElementById("visitorDevice").value = navigator.userAgent;
-    document.getElementById("visitorPage").value = window.location.href;
+    const message = `
+💖 Someone opened your Digital Love Journal!
 
-    // Send form automatically
-    fetch(form.action, {
+🕒 Time: ${new Date().toLocaleString()}
+📱 Device: ${navigator.userAgent}
+🌍 Page: ${window.location.href}
+    `;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
-      body: new FormData(form),
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message
+      })
     });
+
   });
 </script>
 
 </body>
 </html>
+
 
